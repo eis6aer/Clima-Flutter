@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const apiKey = "9951cb2aa78747f6943aa0cd69aca3bc";
+
 const kTempTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
   fontSize: 100.0,
