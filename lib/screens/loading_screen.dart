@@ -1,11 +1,7 @@
 import 'package:clima/screens/location_screen.dart';
-import 'package:clima/services/networking.dart';
-import 'package:clima/utilities/constants.dart';
+import 'package:clima/services/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../services/location.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -13,33 +9,26 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  GetLocation getLocationUseCase = GetLocation();
 
   @override
   void initState() {
     super.initState();
-    getLocationData();
+    getWeatherData();
   }
 
-  void getLocationData() async {
-    await getLocationUseCase.invoke();
-    getData();
-  }
 
-  void getData() async {
-    GetDataUseCase getDataUseCase = GetDataUseCase(
-        url: "https://api.openweathermap.org/data/2.5/weather?lat=${getLocationUseCase.latitude}&lon=${getLocationUseCase.longitude}&appid=$apiKey&units=metric"
-    );
+  void getWeatherData() async {
+    WeatherModel model = WeatherModel();
 
-    var jsonData = await getDataUseCase.invoke();
-
-    Navigator.push(
-        context,
-        MaterialPageRoute(
+    var weatherData = await model.getLocationWeather();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
           builder: (context) {
-            return LocationScreen(weatherData: jsonData,);
+            return LocationScreen(weatherData: weatherData,);
           }
-        )
+          ),
+          (Route<dynamic> route) => false,
     );
   }
 
